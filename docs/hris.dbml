@@ -1,0 +1,462 @@
+// MySQL 8.4 실제 스키마(마이그레이션 `022_employee_evaluation_menu.sql`까지 적용)에서 생성 · 2026-11-23
+// dbdiagram.io → Import → DBML 또는 편집기에 그대로 붙여넣기
+
+// ---- 조직 ----
+Table company_groups {
+  group_id bigint [pk, increment]
+  group_name varchar(100) [not null, unique]
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+}
+
+Table companies {
+  company_id bigint [pk, increment]
+  group_id bigint
+  company_name varchar(100) [not null]
+  business_number varchar(20) [not null, unique]
+  address varchar(200)
+  phone varchar(20)
+  is_active tinyint(1) [not null]
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+  ceo_name varchar(50)
+  founded_date date
+  email varchar(100)
+  homepage varchar(200)
+  industry varchar(50)
+  logo_url varchar(500)
+  name_en varchar(100)
+}
+
+Table departments {
+  department_id bigint [pk, increment]
+  company_id bigint [not null]
+  parent_department_id bigint
+  manager_employee_id bigint
+  department_code varchar(20) [not null]
+  department_name varchar(20) [not null]
+  is_active tinyint(1) [not null]
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+  description varchar(200)
+  indexes {
+    (company_id, department_code) [unique]
+    (company_id, department_id) [unique]
+  }
+}
+
+Table positions {
+  position_id bigint [pk, increment]
+  company_id bigint [not null]
+  position_code varchar(20) [not null]
+  position_name varchar(20) [not null]
+  position_level int [not null]
+  description varchar(50)
+  is_active tinyint(1) [not null]
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+  min_tenure_months int
+  indexes {
+    (company_id, position_code) [unique]
+    (company_id, position_id) [unique]
+  }
+}
+
+Table job_titles {
+  job_title_id bigint [pk, increment]
+  company_id bigint [not null]
+  job_title_code varchar(20) [not null]
+  job_title_name varchar(50) [not null]
+  description varchar(200)
+  is_active tinyint(1) [not null]
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+  indexes {
+    (company_id, job_title_code) [unique]
+    (company_id, job_title_id) [unique]
+  }
+}
+
+Table jobs {
+  job_id bigint [pk, increment]
+  company_id bigint [not null]
+  job_code varchar(20) [not null]
+  job_name varchar(100) [not null]
+  job_category varchar(30) [not null]
+  description varchar(500)
+  is_active tinyint(1) [not null]
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+  job_family varchar(20)
+  indexes {
+    (company_id, job_code) [unique]
+    (company_id, job_id) [unique]
+  }
+}
+
+// ---- 인사 ----
+Table employees {
+  employee_id bigint [pk, increment]
+  company_id bigint [not null]
+  employee_no varchar(20) [not null]
+  employee_name varchar(50) [not null]
+  birth_date date
+  gender varchar(10)
+  phone varchar(20)
+  email varchar(100) [unique]
+  hire_date date [not null]
+  termination_date date
+  employment_type varchar(20) [not null]
+  employment_status varchar(20) [not null]
+  department_id bigint [not null]
+  position_id bigint [not null]
+  job_id bigint [not null]
+  job_title_id bigint
+  current_salary decimal(15,2)
+  profile_image_url varchar(500)
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+  address varchar(200)
+  education varchar(50)
+  indexes {
+    (company_id, department_id, employee_id) [unique]
+    (company_id, employee_id) [unique]
+    (company_id, employee_no) [unique]
+  }
+}
+
+Table assignment_history {
+  assignment_history_id bigint [pk, increment]
+  employee_id bigint [not null]
+  action_type varchar(20) [not null]
+  action_date date [not null]
+  effective_date date
+  from_department_id bigint
+  to_department_id bigint
+  from_position_id bigint
+  to_position_id bigint [not null]
+  from_job_id bigint
+  to_job_id bigint
+  from_job_title_id bigint
+  to_job_title_id bigint
+  reason varchar(300) [not null]
+  document_url varchar(500)
+  created_by_user_id bigint
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+}
+
+Table attendance_records {
+  attendance_id bigint [pk, increment]
+  employee_id bigint [not null]
+  work_date date [not null]
+  status varchar(20) [not null]
+  check_in_at datetime
+  created_at datetime [not null]
+  indexes {
+    (employee_id, work_date) [unique]
+  }
+}
+
+// ---- 급여 ----
+Table salary_history {
+  salary_history_id bigint [pk, increment]
+  employee_id bigint [not null]
+  previous_salary decimal(15,2)
+  new_salary decimal(15,2) [not null]
+  effective_date date [not null]
+  reason varchar(200)
+  changed_by_user_id bigint
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+  base_salary int
+  position_allowance int
+  meal_allowance int
+  other_allowance int
+  components_status varchar(10) [not null]
+}
+
+Table payroll_statements {
+  statement_id bigint [pk, increment]
+  employee_id bigint [not null]
+  pay_month char(7) [not null]
+  base_salary int [not null]
+  position_allowance int [not null]
+  meal_allowance int [not null]
+  other_allowance int [not null]
+  gross_pay int [not null]
+  national_pension int [not null]
+  health_insurance int [not null]
+  long_term_care int [not null]
+  employment_insurance int [not null]
+  income_tax int [not null]
+  local_income_tax int [not null]
+  total_deduction int [not null]
+  net_pay int [not null]
+  paid_at date
+  status varchar(10) [not null]
+  created_at datetime [not null]
+  indexes {
+    (employee_id, pay_month) [unique]
+  }
+}
+
+// ---- 평가 ----
+Table evaluation_periods {
+  evaluation_period_id bigint [pk, increment]
+  company_id bigint [not null]
+  evaluation_year int [not null]
+  evaluation_half varchar(2) [not null]
+  start_date date [not null]
+  end_date date [not null]
+  status varchar(20) [not null]
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+  indexes {
+    (company_id, evaluation_year, evaluation_half) [unique]
+  }
+}
+
+Table employee_evaluations {
+  employee_evaluation_id bigint [pk, increment]
+  employee_id bigint [not null]
+  evaluator_employee_id bigint [not null]
+  evaluation_period_id bigint [not null]
+  score decimal(5,2)
+  grade varchar(10)
+  comments varchar(500)
+  status varchar(20) [not null]
+  evaluated_at datetime(6)
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+  indexes {
+    (employee_id, evaluation_period_id) [unique]
+  }
+}
+
+Table evaluation_stage_records {
+  stage_record_id bigint [pk, increment]
+  evaluation_id bigint [not null]
+  stage varchar(10) [not null]
+  evaluator_id bigint [not null]
+  score decimal(5,2)
+  comment varchar(500)
+  submitted_at datetime [not null]
+  indexes {
+    (evaluation_id, stage, evaluator_id) [unique]
+  }
+}
+
+// ---- 결재·문서 ----
+Table approval_requests {
+  approval_request_id bigint [pk, increment]
+  request_type varchar(30) [not null]
+  reference_id bigint
+  requester_user_id bigint [not null]
+  title varchar(100) [not null]
+  content text
+  status varchar(20) [not null]
+  requested_at datetime(6) [not null]
+  completed_at datetime(6)
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+}
+
+Table approval_steps {
+  approval_step_id bigint [pk, increment]
+  approval_request_id bigint [not null]
+  step_order int [not null]
+  approver_user_id bigint [not null]
+  status varchar(20) [not null]
+  comments varchar(500)
+  decided_at datetime(6)
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+  indexes {
+    (approval_request_id, step_order) [unique]
+  }
+}
+
+Table documents {
+  document_id bigint [pk, increment]
+  employee_id bigint [not null]
+  document_type varchar(30) [not null]
+  file_name varchar(100) [not null]
+  file_path varchar(500) [not null]
+  issued_by_user_id bigint [not null]
+  issued_at datetime(6) [not null]
+  created_at datetime(6) [not null]
+}
+
+// ---- 일정 ----
+Table hr_events {
+  event_id bigint [pk, increment]
+  company_id bigint [not null]
+  title varchar(100) [not null]
+  description varchar(1000)
+  start_at datetime [not null]
+  end_at datetime
+  all_day tinyint(1) [not null]
+  location varchar(100)
+  scope varchar(20) [not null]
+  target varchar(100)
+  created_by_user_id bigint
+  created_at datetime [not null]
+  updated_at datetime [not null]
+  indexes {
+    (company_id, event_id) [unique]
+  }
+}
+
+Table hr_event_departments {
+  event_id bigint [pk]
+  company_id bigint [not null]
+  department_id bigint [pk]
+  include_children tinyint(1) [not null]
+  created_at datetime(6) [not null]
+}
+
+// ---- 계정·권한 ----
+Table users {
+  user_id bigint [pk, increment]
+  employee_id bigint [not null]
+  username varchar(50) [not null, unique]
+  password_hash varchar(255) [not null]
+  status varchar(20) [not null]
+  last_login_at datetime(6)
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+}
+
+Table roles {
+  role_id bigint [pk, increment]
+  role_code varchar(30) [not null, unique]
+  role_name varchar(50) [not null]
+  description varchar(200)
+  is_active tinyint(1) [not null]
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+}
+
+Table user_roles {
+  user_id bigint [pk]
+  role_id bigint [pk]
+  created_at datetime(6) [not null]
+}
+
+Table permissions {
+  permission_id bigint [pk, increment]
+  permission_code varchar(50) [not null, unique]
+  permission_name varchar(100) [not null]
+  resource_type varchar(50)
+  action_type varchar(20) [not null]
+  description varchar(200)
+  is_active tinyint(1) [not null]
+  created_at datetime(6) [not null]
+  updated_at datetime(6) [not null]
+}
+
+Table role_permissions {
+  role_id bigint [pk]
+  permission_id bigint [pk]
+  created_at datetime(6) [not null]
+}
+
+Table user_company_roles {
+  user_id bigint [pk]
+  company_id bigint [pk]
+  role_id bigint [pk]
+  created_at datetime(6) [not null]
+}
+
+Table auth_sessions {
+  session_id char(64) [pk]
+  user_id bigint [not null]
+  csrf_hash char(64) [not null]
+  expires_at datetime(6) [not null]
+  revoked_at datetime(6)
+  created_at datetime(6) [not null]
+  active_company_id bigint
+}
+
+Table auth_login_attempts {
+  attempt_key char(64) [pk]
+  failures int [not null]
+  window_started_at datetime(6) [not null]
+}
+
+// ---- 기록·파일 ----
+Table audit_logs {
+  audit_log_id bigint [pk, increment]
+  user_id bigint
+  action_type varchar(30) [not null]
+  resource_type varchar(50) [not null]
+  resource_id bigint
+  before_data json
+  after_data json
+  ip_address varchar(45)
+  created_at datetime(6) [not null]
+  company_id bigint
+}
+
+Table uploaded_logos {
+  logo_id char(32) [pk]
+  company_id bigint [not null]
+  file_name varchar(100) [not null]
+  media_type varchar(50) [not null]
+  created_at datetime(6) [not null]
+}
+
+Ref fk_approval_requests_requester_user_id: approval_requests.requester_user_id > users.user_id
+Ref fk_approval_steps_approval_request_id: approval_steps.approval_request_id > approval_requests.approval_request_id
+Ref fk_approval_steps_approver_user_id: approval_steps.approver_user_id > users.user_id
+Ref fk_assignment_history_created_by_user_id: assignment_history.created_by_user_id > users.user_id
+Ref fk_assignment_history_employee_id: assignment_history.employee_id > employees.employee_id
+Ref fk_assignment_history_from_department_id: assignment_history.from_department_id > departments.department_id
+Ref fk_assignment_history_from_job_id: assignment_history.from_job_id > jobs.job_id
+Ref fk_assignment_history_from_job_title_id: assignment_history.from_job_title_id > job_titles.job_title_id
+Ref fk_assignment_history_from_position_id: assignment_history.from_position_id > positions.position_id
+Ref fk_assignment_history_to_department_id: assignment_history.to_department_id > departments.department_id
+Ref fk_assignment_history_to_job_id: assignment_history.to_job_id > jobs.job_id
+Ref fk_assignment_history_to_job_title_id: assignment_history.to_job_title_id > job_titles.job_title_id
+Ref fk_assignment_history_to_position_id: assignment_history.to_position_id > positions.position_id
+Ref fk_att_employee: attendance_records.employee_id > employees.employee_id
+Ref fk_audit_logs_user_id: audit_logs.user_id > users.user_id
+Ref fk_auth_sessions_active_company_id: auth_sessions.active_company_id > companies.company_id
+Ref fk_auth_sessions_user: auth_sessions.user_id > users.user_id
+Ref fk_companies_group_id: companies.group_id > company_groups.group_id
+Ref fk_departments_company_id: departments.company_id > companies.company_id
+Ref fk_departments_company_id_parent_department_id: departments.(company_id, parent_department_id) > departments.(company_id, department_id)
+Ref fk_departments_manager_company: departments.(company_id, manager_employee_id) > employees.(company_id, employee_id)
+Ref fk_documents_employee_id: documents.employee_id > employees.employee_id
+Ref fk_documents_issued_by_user_id: documents.issued_by_user_id > users.user_id
+Ref fk_employee_evaluations_employee_id: employee_evaluations.employee_id > employees.employee_id
+Ref fk_employee_evaluations_evaluation_period_id: employee_evaluations.evaluation_period_id > evaluation_periods.evaluation_period_id
+Ref fk_employee_evaluations_evaluator_employee_id: employee_evaluations.evaluator_employee_id > employees.employee_id
+Ref fk_employees_company_id: employees.company_id > companies.company_id
+Ref fk_employees_company_id_department_id: employees.(company_id, department_id) > departments.(company_id, department_id)
+Ref fk_employees_company_id_job_id: employees.(company_id, job_id) > jobs.(company_id, job_id)
+Ref fk_employees_company_id_job_title_id: employees.(company_id, job_title_id) > job_titles.(company_id, job_title_id)
+Ref fk_employees_company_id_position_id: employees.(company_id, position_id) > positions.(company_id, position_id)
+Ref fk_evaluation_periods_company: evaluation_periods.company_id > companies.company_id
+Ref fk_esr_eval: evaluation_stage_records.evaluation_id > employee_evaluations.employee_evaluation_id
+Ref fk_esr_evaluator: evaluation_stage_records.evaluator_id > employees.employee_id
+Ref fk_hr_event_departments_department: hr_event_departments.(company_id, department_id) > departments.(company_id, department_id)
+Ref fk_hr_event_departments_event: hr_event_departments.(company_id, event_id) > hr_events.(company_id, event_id)
+Ref fk_ev_company: hr_events.company_id > companies.company_id
+Ref fk_hr_events_created_by_user_id: hr_events.created_by_user_id > users.user_id
+Ref fk_job_titles_company_id: job_titles.company_id > companies.company_id
+Ref fk_jobs_company_id: jobs.company_id > companies.company_id
+Ref fk_ps_employee: payroll_statements.employee_id > employees.employee_id
+Ref fk_positions_company_id: positions.company_id > companies.company_id
+Ref fk_role_permissions_permission_id: role_permissions.permission_id > permissions.permission_id
+Ref fk_role_permissions_role_id: role_permissions.role_id > roles.role_id
+Ref fk_salary_history_changed_by_user_id: salary_history.changed_by_user_id > users.user_id
+Ref fk_salary_history_employee_id: salary_history.employee_id > employees.employee_id
+Ref fk_uploaded_logos_company: uploaded_logos.company_id > companies.company_id
+Ref fk_user_company_roles_company_id: user_company_roles.company_id > companies.company_id
+Ref fk_user_company_roles_role_id: user_company_roles.role_id > roles.role_id
+Ref fk_user_company_roles_user_id: user_company_roles.user_id > users.user_id
+Ref fk_user_roles_role_id: user_roles.role_id > roles.role_id
+Ref fk_user_roles_user_id: user_roles.user_id > users.user_id
+Ref fk_users_employee_id: users.employee_id > employees.employee_id
