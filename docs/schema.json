@@ -1,0 +1,3050 @@
+{
+ "source": "MySQL 8.4 실제 스키마(마이그레이션 `024_password_change.sql`까지 적용)에서 생성 · 2026-11-24",
+ "last_migration": "024_password_change.sql",
+ "groups": [
+  [
+   "조직",
+   [
+    "company_groups",
+    "companies",
+    "departments",
+    "positions",
+    "job_titles",
+    "jobs"
+   ]
+  ],
+  [
+   "인사",
+   [
+    "employees",
+    "assignment_history",
+    "attendance_records"
+   ]
+  ],
+  [
+   "급여",
+   [
+    "salary_history",
+    "payroll_statements"
+   ]
+  ],
+  [
+   "평가",
+   [
+    "evaluation_periods",
+    "employee_evaluations",
+    "evaluation_stage_records"
+   ]
+  ],
+  [
+   "결재·문서",
+   [
+    "approval_requests",
+    "approval_steps",
+    "documents"
+   ]
+  ],
+  [
+   "일정",
+   [
+    "hr_events",
+    "hr_event_departments"
+   ]
+  ],
+  [
+   "계정·권한",
+   [
+    "users",
+    "roles",
+    "user_roles",
+    "permissions",
+    "role_permissions",
+    "user_company_roles",
+    "auth_sessions",
+    "auth_login_attempts"
+   ]
+  ],
+  [
+   "기록·파일",
+   [
+    "audit_logs",
+    "uploaded_logos"
+   ]
+  ]
+ ],
+ "cols": {
+  "approval_requests": [
+   {
+    "name": "approval_request_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "request_type",
+    "type": "varchar(30)",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "reference_id",
+    "type": "bigint",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "requester_user_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "title",
+    "type": "varchar(100)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "content",
+    "type": "text",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "status",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "MUL",
+    "default": "DRAFT",
+    "extra": ""
+   },
+   {
+    "name": "requested_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "completed_at",
+    "type": "datetime(6)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   }
+  ],
+  "approval_steps": [
+   {
+    "name": "approval_step_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "approval_request_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "step_order",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "approver_user_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "status",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": "PENDING",
+    "extra": ""
+   },
+   {
+    "name": "comments",
+    "type": "varchar(500)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "decided_at",
+    "type": "datetime(6)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   }
+  ],
+  "assignment_history": [
+   {
+    "name": "assignment_history_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "employee_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "action_type",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "action_date",
+    "type": "date",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "effective_date",
+    "type": "date",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "from_department_id",
+    "type": "bigint",
+    "null": true,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "to_department_id",
+    "type": "bigint",
+    "null": true,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "from_position_id",
+    "type": "bigint",
+    "null": true,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "to_position_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "from_job_id",
+    "type": "bigint",
+    "null": true,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "to_job_id",
+    "type": "bigint",
+    "null": true,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "from_job_title_id",
+    "type": "bigint",
+    "null": true,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "to_job_title_id",
+    "type": "bigint",
+    "null": true,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "reason",
+    "type": "varchar(300)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "document_url",
+    "type": "varchar(500)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_by_user_id",
+    "type": "bigint",
+    "null": true,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   }
+  ],
+  "attendance_records": [
+   {
+    "name": "attendance_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "employee_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "work_date",
+    "type": "date",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "status",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "check_in_at",
+    "type": "datetime",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP",
+    "extra": "DEFAULT_GENERATED"
+   }
+  ],
+  "audit_logs": [
+   {
+    "name": "audit_log_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "user_id",
+    "type": "bigint",
+    "null": true,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "action_type",
+    "type": "varchar(30)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "resource_type",
+    "type": "varchar(50)",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "resource_id",
+    "type": "bigint",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "before_data",
+    "type": "json",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "after_data",
+    "type": "json",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "ip_address",
+    "type": "varchar(45)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "MUL",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "company_id",
+    "type": "bigint",
+    "null": true,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   }
+  ],
+  "auth_login_attempts": [
+   {
+    "name": "attempt_key",
+    "type": "char(64)",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "failures",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": "0",
+    "extra": ""
+   },
+   {
+    "name": "window_started_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   }
+  ],
+  "auth_sessions": [
+   {
+    "name": "session_id",
+    "type": "char(64)",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "user_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "csrf_hash",
+    "type": "char(64)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "expires_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "revoked_at",
+    "type": "datetime(6)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "active_company_id",
+    "type": "bigint",
+    "null": true,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   }
+  ],
+  "companies": [
+   {
+    "name": "company_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "group_id",
+    "type": "bigint",
+    "null": true,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "company_name",
+    "type": "varchar(100)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "business_number",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "UNI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "address",
+    "type": "varchar(200)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "phone",
+    "type": "varchar(20)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "is_active",
+    "type": "tinyint(1)",
+    "null": false,
+    "key": "",
+    "default": "1",
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   },
+   {
+    "name": "ceo_name",
+    "type": "varchar(50)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "founded_date",
+    "type": "date",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "email",
+    "type": "varchar(100)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "homepage",
+    "type": "varchar(200)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "industry",
+    "type": "varchar(50)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "logo_url",
+    "type": "varchar(500)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "name_en",
+    "type": "varchar(100)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   }
+  ],
+  "company_groups": [
+   {
+    "name": "group_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "group_name",
+    "type": "varchar(100)",
+    "null": false,
+    "key": "UNI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   }
+  ],
+  "departments": [
+   {
+    "name": "department_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "company_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "parent_department_id",
+    "type": "bigint",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "manager_employee_id",
+    "type": "bigint",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "department_code",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "department_name",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "is_active",
+    "type": "tinyint(1)",
+    "null": false,
+    "key": "",
+    "default": "1",
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   },
+   {
+    "name": "description",
+    "type": "varchar(200)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   }
+  ],
+  "documents": [
+   {
+    "name": "document_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "employee_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "document_type",
+    "type": "varchar(30)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "file_name",
+    "type": "varchar(100)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "file_path",
+    "type": "varchar(500)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "issued_by_user_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "issued_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   }
+  ],
+  "employee_evaluations": [
+   {
+    "name": "employee_evaluation_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "employee_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "evaluator_employee_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "evaluation_period_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "score",
+    "type": "decimal(5,2)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "grade",
+    "type": "varchar(10)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "comments",
+    "type": "varchar(500)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "status",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "evaluated_at",
+    "type": "datetime(6)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   }
+  ],
+  "employees": [
+   {
+    "name": "employee_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "company_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "employee_no",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "employee_name",
+    "type": "varchar(50)",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "birth_date",
+    "type": "date",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "gender",
+    "type": "varchar(10)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "phone",
+    "type": "varchar(20)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "email",
+    "type": "varchar(100)",
+    "null": true,
+    "key": "UNI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "hire_date",
+    "type": "date",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "termination_date",
+    "type": "date",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "employment_type",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "employment_status",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "department_id",
+    "type": "bigint",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "position_id",
+    "type": "bigint",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "job_id",
+    "type": "bigint",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "job_title_id",
+    "type": "bigint",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "current_salary",
+    "type": "decimal(15,2)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "profile_image_url",
+    "type": "varchar(500)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   },
+   {
+    "name": "address",
+    "type": "varchar(200)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "education",
+    "type": "varchar(50)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   }
+  ],
+  "evaluation_periods": [
+   {
+    "name": "evaluation_period_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "company_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "evaluation_year",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "evaluation_half",
+    "type": "varchar(2)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "start_date",
+    "type": "date",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "end_date",
+    "type": "date",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "status",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   }
+  ],
+  "evaluation_stage_records": [
+   {
+    "name": "stage_record_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "evaluation_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "stage",
+    "type": "varchar(10)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "evaluator_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "score",
+    "type": "decimal(5,2)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "comment",
+    "type": "varchar(500)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "submitted_at",
+    "type": "datetime",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP",
+    "extra": "DEFAULT_GENERATED"
+   }
+  ],
+  "hr_event_departments": [
+   {
+    "name": "event_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "company_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "department_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "include_children",
+    "type": "tinyint(1)",
+    "null": false,
+    "key": "",
+    "default": "1",
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   }
+  ],
+  "hr_events": [
+   {
+    "name": "event_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "company_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "title",
+    "type": "varchar(100)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "description",
+    "type": "varchar(1000)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "start_at",
+    "type": "datetime",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "end_at",
+    "type": "datetime",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "all_day",
+    "type": "tinyint(1)",
+    "null": false,
+    "key": "",
+    "default": "0",
+    "extra": ""
+   },
+   {
+    "name": "location",
+    "type": "varchar(100)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "scope",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": "COMPANY",
+    "extra": ""
+   },
+   {
+    "name": "target",
+    "type": "varchar(100)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_by_user_id",
+    "type": "bigint",
+    "null": true,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP"
+   }
+  ],
+  "job_titles": [
+   {
+    "name": "job_title_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "company_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "job_title_code",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "job_title_name",
+    "type": "varchar(50)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "description",
+    "type": "varchar(200)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "is_active",
+    "type": "tinyint(1)",
+    "null": false,
+    "key": "",
+    "default": "1",
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   }
+  ],
+  "jobs": [
+   {
+    "name": "job_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "company_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "job_code",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "job_name",
+    "type": "varchar(100)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "job_category",
+    "type": "varchar(30)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "description",
+    "type": "varchar(500)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "is_active",
+    "type": "tinyint(1)",
+    "null": false,
+    "key": "",
+    "default": "1",
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   },
+   {
+    "name": "job_family",
+    "type": "varchar(20)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   }
+  ],
+  "payroll_statements": [
+   {
+    "name": "statement_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "employee_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "pay_month",
+    "type": "char(7)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "base_salary",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "position_allowance",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "meal_allowance",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "other_allowance",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "gross_pay",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "national_pension",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "health_insurance",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "long_term_care",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "employment_insurance",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "income_tax",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "local_income_tax",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "total_deduction",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "net_pay",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "paid_at",
+    "type": "date",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "status",
+    "type": "varchar(10)",
+    "null": false,
+    "key": "",
+    "default": "DRAFT",
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP",
+    "extra": "DEFAULT_GENERATED"
+   }
+  ],
+  "permissions": [
+   {
+    "name": "permission_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "permission_code",
+    "type": "varchar(50)",
+    "null": false,
+    "key": "UNI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "permission_name",
+    "type": "varchar(100)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "resource_type",
+    "type": "varchar(50)",
+    "null": true,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "action_type",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "description",
+    "type": "varchar(200)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "is_active",
+    "type": "tinyint(1)",
+    "null": false,
+    "key": "",
+    "default": "1",
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   }
+  ],
+  "positions": [
+   {
+    "name": "position_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "company_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "position_code",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "position_name",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "position_level",
+    "type": "int",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "description",
+    "type": "varchar(50)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "is_active",
+    "type": "tinyint(1)",
+    "null": false,
+    "key": "",
+    "default": "1",
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   },
+   {
+    "name": "min_tenure_months",
+    "type": "int",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   }
+  ],
+  "role_permissions": [
+   {
+    "name": "role_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "permission_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   }
+  ],
+  "roles": [
+   {
+    "name": "role_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "role_code",
+    "type": "varchar(30)",
+    "null": false,
+    "key": "UNI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "role_name",
+    "type": "varchar(50)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "description",
+    "type": "varchar(200)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "is_active",
+    "type": "tinyint(1)",
+    "null": false,
+    "key": "",
+    "default": "1",
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   }
+  ],
+  "salary_history": [
+   {
+    "name": "salary_history_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "employee_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "previous_salary",
+    "type": "decimal(15,2)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "new_salary",
+    "type": "decimal(15,2)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "effective_date",
+    "type": "date",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "reason",
+    "type": "varchar(200)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "changed_by_user_id",
+    "type": "bigint",
+    "null": true,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   },
+   {
+    "name": "base_salary",
+    "type": "int",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "position_allowance",
+    "type": "int",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "meal_allowance",
+    "type": "int",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "other_allowance",
+    "type": "int",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "components_status",
+    "type": "varchar(10)",
+    "null": false,
+    "key": "",
+    "default": "UNKNOWN",
+    "extra": ""
+   }
+  ],
+  "uploaded_logos": [
+   {
+    "name": "logo_id",
+    "type": "char(32)",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "company_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "file_name",
+    "type": "varchar(100)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "media_type",
+    "type": "varchar(50)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   }
+  ],
+  "user_company_roles": [
+   {
+    "name": "user_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "company_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "role_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   }
+  ],
+  "user_roles": [
+   {
+    "name": "user_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "role_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   }
+  ],
+  "users": [
+   {
+    "name": "user_id",
+    "type": "bigint",
+    "null": false,
+    "key": "PRI",
+    "default": null,
+    "extra": "auto_increment"
+   },
+   {
+    "name": "employee_id",
+    "type": "bigint",
+    "null": false,
+    "key": "MUL",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "username",
+    "type": "varchar(50)",
+    "null": false,
+    "key": "UNI",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "password_hash",
+    "type": "varchar(255)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "status",
+    "type": "varchar(20)",
+    "null": false,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "password_change_required",
+    "type": "tinyint(1)",
+    "null": false,
+    "key": "",
+    "default": "0",
+    "extra": ""
+   },
+   {
+    "name": "password_changed_at",
+    "type": "datetime(6)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "last_login_at",
+    "type": "datetime(6)",
+    "null": true,
+    "key": "",
+    "default": null,
+    "extra": ""
+   },
+   {
+    "name": "created_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED"
+   },
+   {
+    "name": "updated_at",
+    "type": "datetime(6)",
+    "null": false,
+    "key": "",
+    "default": "CURRENT_TIMESTAMP(6)",
+    "extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP(6)"
+   }
+  ]
+ },
+ "fks": [
+  {
+   "name": "fk_approval_requests_requester_user_id",
+   "table": "approval_requests",
+   "col": "requester_user_id",
+   "ref": "users",
+   "ref_col": "user_id"
+  },
+  {
+   "name": "fk_approval_steps_approval_request_id",
+   "table": "approval_steps",
+   "col": "approval_request_id",
+   "ref": "approval_requests",
+   "ref_col": "approval_request_id"
+  },
+  {
+   "name": "fk_approval_steps_approver_user_id",
+   "table": "approval_steps",
+   "col": "approver_user_id",
+   "ref": "users",
+   "ref_col": "user_id"
+  },
+  {
+   "name": "fk_assignment_history_created_by_user_id",
+   "table": "assignment_history",
+   "col": "created_by_user_id",
+   "ref": "users",
+   "ref_col": "user_id"
+  },
+  {
+   "name": "fk_assignment_history_employee_id",
+   "table": "assignment_history",
+   "col": "employee_id",
+   "ref": "employees",
+   "ref_col": "employee_id"
+  },
+  {
+   "name": "fk_assignment_history_from_department_id",
+   "table": "assignment_history",
+   "col": "from_department_id",
+   "ref": "departments",
+   "ref_col": "department_id"
+  },
+  {
+   "name": "fk_assignment_history_from_job_id",
+   "table": "assignment_history",
+   "col": "from_job_id",
+   "ref": "jobs",
+   "ref_col": "job_id"
+  },
+  {
+   "name": "fk_assignment_history_from_job_title_id",
+   "table": "assignment_history",
+   "col": "from_job_title_id",
+   "ref": "job_titles",
+   "ref_col": "job_title_id"
+  },
+  {
+   "name": "fk_assignment_history_from_position_id",
+   "table": "assignment_history",
+   "col": "from_position_id",
+   "ref": "positions",
+   "ref_col": "position_id"
+  },
+  {
+   "name": "fk_assignment_history_to_department_id",
+   "table": "assignment_history",
+   "col": "to_department_id",
+   "ref": "departments",
+   "ref_col": "department_id"
+  },
+  {
+   "name": "fk_assignment_history_to_job_id",
+   "table": "assignment_history",
+   "col": "to_job_id",
+   "ref": "jobs",
+   "ref_col": "job_id"
+  },
+  {
+   "name": "fk_assignment_history_to_job_title_id",
+   "table": "assignment_history",
+   "col": "to_job_title_id",
+   "ref": "job_titles",
+   "ref_col": "job_title_id"
+  },
+  {
+   "name": "fk_assignment_history_to_position_id",
+   "table": "assignment_history",
+   "col": "to_position_id",
+   "ref": "positions",
+   "ref_col": "position_id"
+  },
+  {
+   "name": "fk_att_employee",
+   "table": "attendance_records",
+   "col": "employee_id",
+   "ref": "employees",
+   "ref_col": "employee_id"
+  },
+  {
+   "name": "fk_audit_logs_user_id",
+   "table": "audit_logs",
+   "col": "user_id",
+   "ref": "users",
+   "ref_col": "user_id"
+  },
+  {
+   "name": "fk_auth_sessions_active_company_id",
+   "table": "auth_sessions",
+   "col": "active_company_id",
+   "ref": "companies",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_auth_sessions_user",
+   "table": "auth_sessions",
+   "col": "user_id",
+   "ref": "users",
+   "ref_col": "user_id"
+  },
+  {
+   "name": "fk_companies_group_id",
+   "table": "companies",
+   "col": "group_id",
+   "ref": "company_groups",
+   "ref_col": "group_id"
+  },
+  {
+   "name": "fk_departments_company_id",
+   "table": "departments",
+   "col": "company_id",
+   "ref": "companies",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_departments_company_id_parent_department_id",
+   "table": "departments",
+   "col": "company_id",
+   "ref": "departments",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_departments_company_id_parent_department_id",
+   "table": "departments",
+   "col": "parent_department_id",
+   "ref": "departments",
+   "ref_col": "department_id"
+  },
+  {
+   "name": "fk_departments_manager_company",
+   "table": "departments",
+   "col": "company_id",
+   "ref": "employees",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_departments_manager_company",
+   "table": "departments",
+   "col": "manager_employee_id",
+   "ref": "employees",
+   "ref_col": "employee_id"
+  },
+  {
+   "name": "fk_documents_employee_id",
+   "table": "documents",
+   "col": "employee_id",
+   "ref": "employees",
+   "ref_col": "employee_id"
+  },
+  {
+   "name": "fk_documents_issued_by_user_id",
+   "table": "documents",
+   "col": "issued_by_user_id",
+   "ref": "users",
+   "ref_col": "user_id"
+  },
+  {
+   "name": "fk_employee_evaluations_employee_id",
+   "table": "employee_evaluations",
+   "col": "employee_id",
+   "ref": "employees",
+   "ref_col": "employee_id"
+  },
+  {
+   "name": "fk_employee_evaluations_evaluation_period_id",
+   "table": "employee_evaluations",
+   "col": "evaluation_period_id",
+   "ref": "evaluation_periods",
+   "ref_col": "evaluation_period_id"
+  },
+  {
+   "name": "fk_employee_evaluations_evaluator_employee_id",
+   "table": "employee_evaluations",
+   "col": "evaluator_employee_id",
+   "ref": "employees",
+   "ref_col": "employee_id"
+  },
+  {
+   "name": "fk_employees_company_id",
+   "table": "employees",
+   "col": "company_id",
+   "ref": "companies",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_employees_company_id_department_id",
+   "table": "employees",
+   "col": "company_id",
+   "ref": "departments",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_employees_company_id_department_id",
+   "table": "employees",
+   "col": "department_id",
+   "ref": "departments",
+   "ref_col": "department_id"
+  },
+  {
+   "name": "fk_employees_company_id_job_id",
+   "table": "employees",
+   "col": "company_id",
+   "ref": "jobs",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_employees_company_id_job_id",
+   "table": "employees",
+   "col": "job_id",
+   "ref": "jobs",
+   "ref_col": "job_id"
+  },
+  {
+   "name": "fk_employees_company_id_job_title_id",
+   "table": "employees",
+   "col": "company_id",
+   "ref": "job_titles",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_employees_company_id_job_title_id",
+   "table": "employees",
+   "col": "job_title_id",
+   "ref": "job_titles",
+   "ref_col": "job_title_id"
+  },
+  {
+   "name": "fk_employees_company_id_position_id",
+   "table": "employees",
+   "col": "company_id",
+   "ref": "positions",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_employees_company_id_position_id",
+   "table": "employees",
+   "col": "position_id",
+   "ref": "positions",
+   "ref_col": "position_id"
+  },
+  {
+   "name": "fk_evaluation_periods_company",
+   "table": "evaluation_periods",
+   "col": "company_id",
+   "ref": "companies",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_esr_eval",
+   "table": "evaluation_stage_records",
+   "col": "evaluation_id",
+   "ref": "employee_evaluations",
+   "ref_col": "employee_evaluation_id"
+  },
+  {
+   "name": "fk_esr_evaluator",
+   "table": "evaluation_stage_records",
+   "col": "evaluator_id",
+   "ref": "employees",
+   "ref_col": "employee_id"
+  },
+  {
+   "name": "fk_hr_event_departments_department",
+   "table": "hr_event_departments",
+   "col": "company_id",
+   "ref": "departments",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_hr_event_departments_department",
+   "table": "hr_event_departments",
+   "col": "department_id",
+   "ref": "departments",
+   "ref_col": "department_id"
+  },
+  {
+   "name": "fk_hr_event_departments_event",
+   "table": "hr_event_departments",
+   "col": "company_id",
+   "ref": "hr_events",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_hr_event_departments_event",
+   "table": "hr_event_departments",
+   "col": "event_id",
+   "ref": "hr_events",
+   "ref_col": "event_id"
+  },
+  {
+   "name": "fk_ev_company",
+   "table": "hr_events",
+   "col": "company_id",
+   "ref": "companies",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_hr_events_created_by_user_id",
+   "table": "hr_events",
+   "col": "created_by_user_id",
+   "ref": "users",
+   "ref_col": "user_id"
+  },
+  {
+   "name": "fk_job_titles_company_id",
+   "table": "job_titles",
+   "col": "company_id",
+   "ref": "companies",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_jobs_company_id",
+   "table": "jobs",
+   "col": "company_id",
+   "ref": "companies",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_ps_employee",
+   "table": "payroll_statements",
+   "col": "employee_id",
+   "ref": "employees",
+   "ref_col": "employee_id"
+  },
+  {
+   "name": "fk_positions_company_id",
+   "table": "positions",
+   "col": "company_id",
+   "ref": "companies",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_role_permissions_permission_id",
+   "table": "role_permissions",
+   "col": "permission_id",
+   "ref": "permissions",
+   "ref_col": "permission_id"
+  },
+  {
+   "name": "fk_role_permissions_role_id",
+   "table": "role_permissions",
+   "col": "role_id",
+   "ref": "roles",
+   "ref_col": "role_id"
+  },
+  {
+   "name": "fk_salary_history_changed_by_user_id",
+   "table": "salary_history",
+   "col": "changed_by_user_id",
+   "ref": "users",
+   "ref_col": "user_id"
+  },
+  {
+   "name": "fk_salary_history_employee_id",
+   "table": "salary_history",
+   "col": "employee_id",
+   "ref": "employees",
+   "ref_col": "employee_id"
+  },
+  {
+   "name": "fk_uploaded_logos_company",
+   "table": "uploaded_logos",
+   "col": "company_id",
+   "ref": "companies",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_user_company_roles_company_id",
+   "table": "user_company_roles",
+   "col": "company_id",
+   "ref": "companies",
+   "ref_col": "company_id"
+  },
+  {
+   "name": "fk_user_company_roles_role_id",
+   "table": "user_company_roles",
+   "col": "role_id",
+   "ref": "roles",
+   "ref_col": "role_id"
+  },
+  {
+   "name": "fk_user_company_roles_user_id",
+   "table": "user_company_roles",
+   "col": "user_id",
+   "ref": "users",
+   "ref_col": "user_id"
+  },
+  {
+   "name": "fk_user_roles_role_id",
+   "table": "user_roles",
+   "col": "role_id",
+   "ref": "roles",
+   "ref_col": "role_id"
+  },
+  {
+   "name": "fk_user_roles_user_id",
+   "table": "user_roles",
+   "col": "user_id",
+   "ref": "users",
+   "ref_col": "user_id"
+  },
+  {
+   "name": "fk_users_employee_id",
+   "table": "users",
+   "col": "employee_id",
+   "ref": "employees",
+   "ref_col": "employee_id"
+  }
+ ],
+ "uniq": [
+  {
+   "table": "approval_steps",
+   "name": "uq_approval_steps_approval_request_id_step_order",
+   "cols": [
+    "approval_request_id",
+    "step_order"
+   ]
+  },
+  {
+   "table": "attendance_records",
+   "name": "uq_att_day",
+   "cols": [
+    "employee_id",
+    "work_date"
+   ]
+  },
+  {
+   "table": "companies",
+   "name": "uq_companies_business_number",
+   "cols": [
+    "business_number"
+   ]
+  },
+  {
+   "table": "company_groups",
+   "name": "uq_company_groups_group_name",
+   "cols": [
+    "group_name"
+   ]
+  },
+  {
+   "table": "departments",
+   "name": "uq_departments_company_id_department_code",
+   "cols": [
+    "company_id",
+    "department_code"
+   ]
+  },
+  {
+   "table": "departments",
+   "name": "uq_departments_company_id_department_id",
+   "cols": [
+    "company_id",
+    "department_id"
+   ]
+  },
+  {
+   "table": "employee_evaluations",
+   "name": "uq_employee_evaluations_employee_id_evaluation_period_id",
+   "cols": [
+    "employee_id",
+    "evaluation_period_id"
+   ]
+  },
+  {
+   "table": "employees",
+   "name": "uq_employees_company_id_department_id_employee_id",
+   "cols": [
+    "company_id",
+    "department_id",
+    "employee_id"
+   ]
+  },
+  {
+   "table": "employees",
+   "name": "uq_employees_company_id_employee_id",
+   "cols": [
+    "company_id",
+    "employee_id"
+   ]
+  },
+  {
+   "table": "employees",
+   "name": "uq_employees_company_id_employee_no",
+   "cols": [
+    "company_id",
+    "employee_no"
+   ]
+  },
+  {
+   "table": "employees",
+   "name": "uq_employees_email",
+   "cols": [
+    "email"
+   ]
+  },
+  {
+   "table": "evaluation_periods",
+   "name": "uq_evaluation_periods_company_year_half",
+   "cols": [
+    "company_id",
+    "evaluation_year",
+    "evaluation_half"
+   ]
+  },
+  {
+   "table": "evaluation_stage_records",
+   "name": "uq_stage_once",
+   "cols": [
+    "evaluation_id",
+    "stage",
+    "evaluator_id"
+   ]
+  },
+  {
+   "table": "hr_events",
+   "name": "uq_hr_events_company_id_event_id",
+   "cols": [
+    "company_id",
+    "event_id"
+   ]
+  },
+  {
+   "table": "job_titles",
+   "name": "uq_job_titles_company_id_job_title_code",
+   "cols": [
+    "company_id",
+    "job_title_code"
+   ]
+  },
+  {
+   "table": "job_titles",
+   "name": "uq_job_titles_company_id_job_title_id",
+   "cols": [
+    "company_id",
+    "job_title_id"
+   ]
+  },
+  {
+   "table": "jobs",
+   "name": "uq_jobs_company_id_job_code",
+   "cols": [
+    "company_id",
+    "job_code"
+   ]
+  },
+  {
+   "table": "jobs",
+   "name": "uq_jobs_company_id_job_id",
+   "cols": [
+    "company_id",
+    "job_id"
+   ]
+  },
+  {
+   "table": "payroll_statements",
+   "name": "uq_ps_month",
+   "cols": [
+    "employee_id",
+    "pay_month"
+   ]
+  },
+  {
+   "table": "permissions",
+   "name": "uq_permissions_permission_code",
+   "cols": [
+    "permission_code"
+   ]
+  },
+  {
+   "table": "positions",
+   "name": "uq_positions_company_id_position_code",
+   "cols": [
+    "company_id",
+    "position_code"
+   ]
+  },
+  {
+   "table": "positions",
+   "name": "uq_positions_company_id_position_id",
+   "cols": [
+    "company_id",
+    "position_id"
+   ]
+  },
+  {
+   "table": "roles",
+   "name": "uq_roles_role_code",
+   "cols": [
+    "role_code"
+   ]
+  },
+  {
+   "table": "users",
+   "name": "uq_users_username",
+   "cols": [
+    "username"
+   ]
+  }
+ ],
+ "checks": {
+  "approval_requests": [
+   [
+    "ck_approval_requests_status",
+    "(status in (\\'DRAFT\\',\\'IN_PROGRESS\\',\\'APPROVED\\',\\'REJECTED\\'))"
+   ]
+  ],
+  "approval_steps": [
+   [
+    "ck_approval_steps_order",
+    "(step_order > 0)"
+   ],
+   [
+    "ck_approval_steps_status",
+    "(status in (\\'WAITING\\',\\'PENDING\\',\\'APPROVED\\',\\'REJECTED\\',\\'SKIPPED\\'))"
+   ]
+  ],
+  "attendance_records": [
+   [
+    "ck_att_status",
+    "(status in (\\'PRESENT\\',\\'LEAVE\\',\\'ABSENT\\'))"
+   ]
+  ],
+  "employee_evaluations": [
+   [
+    "ck_employee_evaluations_score",
+    "((score is null) or (score >= 0))"
+   ]
+  ],
+  "employees": [
+   [
+    "ck_employees_salary_nonnegative",
+    "((current_salary is null) or (current_salary >= 0))"
+   ],
+   [
+    "ck_employees_termination_date",
+    "((termination_date is null) or (termination_date >= hire_date))"
+   ]
+  ],
+  "evaluation_periods": [
+   [
+    "ck_evaluation_periods_dates",
+    "(end_date >= start_date)"
+   ],
+   [
+    "ck_evaluation_periods_half",
+    "(evaluation_half in (\\'H1\\',\\'H2\\'))"
+   ]
+  ],
+  "evaluation_stage_records": [
+   [
+    "ck_score",
+    "((score is null) or ((score >= 0) and (score <= 100)))"
+   ],
+   [
+    "ck_stage",
+    "(stage in (\\'GOAL\\',\\'SELF\\',\\'PEER\\',\\'LEADER\\'))"
+   ]
+  ],
+  "hr_events": [
+   [
+    "ck_hr_events_range",
+    "((end_at is null) or (end_at >= start_at))"
+   ],
+   [
+    "ck_hr_events_scope",
+    "(scope in (\\'COMPANY\\',\\'DEPARTMENTS\\'))"
+   ]
+  ],
+  "payroll_statements": [
+   [
+    "ck_ps_ded",
+    "(total_deduction = (((((national_pension + health_insurance) + long_term_care) + employment_insurance) + income_tax) + local_income_tax))"
+   ],
+   [
+    "ck_ps_gross",
+    "(gross_pay = (((base_salary + position_allowance) + meal_allowance) + other_allowance))"
+   ],
+   [
+    "ck_ps_net",
+    "(net_pay = (gross_pay - total_deduction))"
+   ],
+   [
+    "ck_ps_paid",
+    "((status <> \\'PAID\\') or (paid_at is not null))"
+   ],
+   [
+    "ck_ps_status",
+    "(status in (\\'DRAFT\\',\\'CONFIRMED\\',\\'PAID\\'))"
+   ]
+  ],
+  "salary_history": [
+   [
+    "ck_salary_components",
+    "(((components_status = \\'UNKNOWN\\') and (base_salary is null) and (position_allowance is null) and (meal_allowance is null) and (other_allowance is null)) or ((components_status = \\'COMPLETE\\') and (base_salary is not null) and (position_allowance is not null) and (meal_allowance is not null) and (other_allowance is not null) and ((((base_salary + position_allowance) + meal_allowance) + other_allowance) = new_salary)))"
+   ],
+   [
+    "ck_salary_history_new",
+    "(new_salary >= 0)"
+   ],
+   [
+    "ck_salary_history_previous",
+    "((previous_salary is null) or (previous_salary >= 0))"
+   ]
+  ]
+ },
+ "views": [
+  "vw_approval_progress",
+  "vw_assignment_timeline",
+  "vw_current_salaries",
+  "vw_department_headcount",
+  "vw_employee_directory",
+  "vw_employee_evaluation_results",
+  "vw_nl_employee_directory",
+  "vw_nl_org_headcounts",
+  "vw_position_headcount",
+  "vw_salary_timeline",
+  "vw_user_effective_permissions"
+ ],
+ "routines": [
+  "sp_approve_step",
+  "sp_assign_employee",
+  "sp_change_salary",
+  "sp_delete_employee_without_assignment_history",
+  "sp_set_department_manager"
+ ],
+ "triggers": 56
+}

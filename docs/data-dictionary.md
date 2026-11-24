@@ -1,8 +1,8 @@
 # HRIS 데이터 사전
 
-MySQL 8.4 실제 스키마(마이그레이션 `022_employee_evaluation_menu.sql`까지 적용)에서 생성 · 2026-11-23.
+MySQL 8.4 실제 스키마(마이그레이션 `024_password_change.sql`까지 적용)에서 생성 · 2026-11-24.
 
-테이블 29개(마이그레이션 기록 `schema_migrations` 제외), 컬럼 269개, 외래 키 53개, 뷰 11개, 프로시저 5개, 트리거 56개.
+테이블 29개(마이그레이션 기록 `schema_migrations` 제외), 컬럼 271개, 외래 키 53개, 뷰 11개, 프로시저 5개, 트리거 56개.
 
 키: `PK` 기본 키, `UQ` 단일 컬럼 유일, `FK → 테이블.컬럼` 외래 키. 기본값 `—`는 없음.
 
@@ -410,6 +410,8 @@ CHECK:
 | `username` | varchar(50) | N | UQ | — |  |
 | `password_hash` | varchar(255) | N |  | — |  |
 | `status` | varchar(20) | N |  | — |  |
+| `password_change_required` | tinyint(1) | N |  | 0 |  |
+| `password_changed_at` | datetime(6) | Y |  | — |  |
 | `last_login_at` | datetime(6) | Y |  | — |  |
 | `created_at` | datetime(6) | N |  | CURRENT_TIMESTAMP(6) |  |
 | `updated_at` | datetime(6) | N |  | CURRENT_TIMESTAMP(6) | 수정 시 갱신 |

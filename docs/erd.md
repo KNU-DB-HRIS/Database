@@ -1,6 +1,6 @@
 # HRIS ERD
 
-MySQL 8.4 실제 스키마(마이그레이션 `022_employee_evaluation_menu.sql`까지 적용)에서 생성 · 2026-11-23.
+MySQL 8.4 실제 스키마(마이그레이션 `024_password_change.sql`까지 적용)에서 생성 · 2026-11-24.
 
 GitHub에서 그림으로 보입니다. 키 컬럼(PK, FK)만 표시하고, 전체 컬럼은 `data-dictionary.md`에 있습니다.
 선 표기: `||` 반드시 1, `|o` 0 또는 1(FK가 NULL 가능), `o{` 0 이상.
@@ -640,6 +640,8 @@ erDiagram
         varchar username
         varchar password_hash
         varchar status
+        tinyint password_change_required
+        datetime password_changed_at
         datetime last_login_at
     }
     roles {
