@@ -1,4 +1,4 @@
-// MySQL 8.4 실제 스키마(마이그레이션 `022_employee_evaluation_menu.sql`까지 적용)에서 생성 · 2026-11-23
+// MySQL 8.4 실제 스키마(마이그레이션 `024_password_change.sql`까지 적용)에서 생성 · 2026-11-24
 // dbdiagram.io → Import → DBML 또는 편집기에 그대로 붙여넣기
 
 // ---- 조직 ----
@@ -323,6 +323,8 @@ Table users {
   username varchar(50) [not null, unique]
   password_hash varchar(255) [not null]
   status varchar(20) [not null]
+  password_change_required tinyint(1) [not null]
+  password_changed_at datetime(6)
   last_login_at datetime(6)
   created_at datetime(6) [not null]
   updated_at datetime(6) [not null]
