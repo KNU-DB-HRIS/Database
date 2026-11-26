@@ -8,7 +8,7 @@ MySQL 8.4 기반 HRIS(Human Resource Information System) 데이터베이스의 �
 | 조회 뷰 | 11개 |
 | 업무 프로시저 | 5개 |
 | 검증·감사 트리거 | 56개 |
-| SQL 스크립트 | 24개 (`001`~`024`) |
+| SQL 스크립트 | 25개 (`001`~`025`) |
 
 ## 1. 실행 환경 및 적용 순서
 
@@ -19,7 +19,7 @@ MySQL 8.4 기반 HRIS(Human Resource Information System) 데이터베이스의 �
 - **실행 도구:** MySQL CLI 또는 `DELIMITER`를 지원하는 SQL 클라이언트
 
 1. 신규 구축 시 InnoDB와 `utf8mb4`를 사용하는 **빈 데이터베이스**를 생성하고 선택합니다.
-2. **`001`~`014` 초기 스키마**를 번호순으로 적용한 뒤 **`015`~`024` 마이그레이션**을 순서대로 적용합니다. 각 파일은 적용 이력에 따라 **한 번만** 실행합니다.
+2. **`001`~`014` 초기 스키마**를 번호순으로 적용한 뒤 **`015`~`025` 마이그레이션**을 순서대로 적용합니다. 각 파일은 적용 이력에 따라 **한 번만** 실행합니다.
 3. 운영 중인 DB에는 기존에 적용되지 않은 번호의 마이그레이션만 실행합니다. 적용 전에 반드시 백업하고, 사전 조건과 기존 데이터 호환성을 확인합니다.
 4. 오류가 발생하면 실행을 중단하고 원인을 해결한 뒤 적용 이력을 확인합니다. 이미 정상 적용된 스크립트는 재실행하지 않습니다.
 
@@ -40,16 +40,18 @@ MySQL 8.4 기반 HRIS(Human Resource Information System) 데이터베이스의 �
 | `022` | 일반 사원 평가 메뉴 권한 |
 | `023` | 역할 세분화: 인사 담당자(`HR_MANAGER`)·인사 사원(`HR_STAFF`) 역할, 동작 권한 18개, 역할별 권한(`role_permissions`). 테이블 구조 변경 없음 |
 | `024` | 첫 로그인 비밀번호 변경: `users.password_change_required`, `password_changed_at`, 동작 권한 `PASSWORD_RESET`(HR 관리자). 기존 계정은 0으로 시작 |
+| `025` | 프로시저를 현재 규칙에 맞게 재생성: `sp_approve_step`(016의 결재 상태 IN_PROGRESS·WAITING·SKIPPED), `sp_assign_employee`·`sp_change_salary`(퇴사자, 입사일, 날짜 순서), `sp_delete_employee_without_assignment_history`(입사 이력만 있는 직원). 테이블·데이터 변경 없음 |
 
-`019`~`024`는 백엔드 저장소 `database/`와 같은 파일입니다. 백엔드는 같은 번호의 파일을 `schema_migrations`에 기록하며 적용합니다.
+`019`~`025`는 백엔드 저장소 `database/`와 같은 파일입니다. 백엔드는 같은 번호의 파일을 `schema_migrations`에 기록하며 적용합니다.
 
-**ERD와 데이터 사전**은 `docs/`에 있습니다. 모두 `001`~`024`를 적용한 MySQL 8.4의 실제 스키마(`information_schema`)에서 생성했습니다.
+**ERD와 데이터 사전**은 `docs/`에 있습니다. 모두 `001`~`025`를 적용한 MySQL 8.4의 실제 스키마(`information_schema`)에서 생성했습니다.
 
 | 파일 | 내용 |
 | --- | --- |
 | `docs/erd.md` | Mermaid ERD (전체 + 도메인별 8개, GitHub에서 그림으로 표시) |
 | `docs/erd/*.png` | 같은 ERD의 이미지 |
 | `docs/data-dictionary.md` | 테이블별 컬럼, 타입, NULL, 키, 기본값, 복합 유일, CHECK |
+| `docs/requirements-trace.md` | 제안서 요구사항 → API → DB 객체 → 자동 검사 추적표 |
 | `docs/hris.dbml` | dbdiagram.io에 붙여넣으면 편집 가능한 ERD |
 
 파일명은 `{3자리 실행 순서}_{동사}_{대상}.sql` 규칙을 사용합니다. 예: `001_create_organization_tables.sql`.
